@@ -17,7 +17,7 @@ public:
 
 private:
   Napi::Value GetDevices(const Napi::CallbackInfo &info);
-  // Napi::Value GetVersion(const Napi::CallbackInfo &info);
+  Napi::Value GetVersion(const Napi::CallbackInfo &info);
 };
 
 #endif // NORDAUDIO_H

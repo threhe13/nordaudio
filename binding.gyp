@@ -16,7 +16,42 @@
       ],
       "defines": [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],
       "conditions": [
-        ['OS=="win"', {}],
+        ["OS=='win' and target_arch=='x64'", {
+          "link_settings": {
+            "libraries": [
+              "-Wl,-rpath,build/Release/"
+            ]
+          },
+          "libraries" : [
+            "<(module_root_dir)/portaudio/bin/Windows/x64/portaudio_x64.lib"
+          ],
+          "copies": [
+            {
+              "destination": "<(module_root_dir)/build/Release/",
+              "files": [
+                "portaudio/bin/Windows/x64/portaudio_x64.dll",
+              ]
+            }
+          ]
+        }],
+        ["OS=='win' and target_arch=='x32'", {
+          "link_settings": {
+            "libraries": [
+              "-Wl,-rpath,build/Release/"
+            ]
+          },
+          "libraries" : [
+            "<(module_root_dir)/portaudio/bin/Windows/Win32/portaudio_x86.lib"
+          ],
+          "copies": [
+            {
+              "destination": "<(module_root_dir)/build/Release/",
+              "files": [
+                "portaudio/bin/Windows/Win32/portaudio_x86.dll",
+              ]
+            }
+          ]
+        }],
         ['OS=="mac"', {
           "cflgs+": [ '-fvisibility=hideen' ],
           "xcode_settings": {

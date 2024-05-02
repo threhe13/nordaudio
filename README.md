@@ -10,10 +10,12 @@
 - MacOS
 
   > - M2 Pro
+  > - Sonoma
 
 - Windows
 
-  > -
+  > - Windows 11
+  > - Intel i5-11400
 
 ## API
 

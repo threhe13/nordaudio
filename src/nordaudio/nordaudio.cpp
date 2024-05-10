@@ -16,43 +16,22 @@ Napi::Object Nordaudio::Initialize(Napi::Env env, Napi::Object exports)
   Napi::Function func = DefineClass(env, "Nordaudio", {InstanceMethod("GetDevices", &Nordaudio::GetDevices), InstanceMethod("GetVersion", &Nordaudio::GetVersion)});
 
   Napi::FunctionReference *constructor = new Napi::FunctionReference();
+  // Create a persistent reference to the class constructor. This will allow
+  // a function called on a class prototype and a function
+  // called on instance of a class to be distinguished from each other.
   *constructor = Napi::Persistent(func);
+
+  // Store the constructor as the add-on instance data. This will allow this
+  // add-on to support multiple instances of itself running on multiple worker
+  // threads, as well as multiple instances of itself running in different
+  // contexts on the same thread.
+  //
+  // By default, the value set on the environment here will be destroyed when
+  // the add-on is unloaded using the `delete` operator, but it is also
+  // possible to supply a custom deleter.
   env.SetInstanceData(constructor);
   exports.Set("Nordaudio", func);
   return exports;
-}
-
-Napi::Value Nordaudio::GetDevices(const Napi::CallbackInfo &info)
-{
-  Napi::Env env = info.Env();
-
-  PaError error = Pa_Initialize();
-
-  if (error != paNoError)
-  {
-    // Napi::String errorText = Napi::String::New(env, Pa_GetErrorText(error).c_str());
-    Napi::Error::New(env, "[ERROR] Failed to initialize PortAudio").ThrowAsJavaScriptException();
-  }
-
-  int devices = Pa_GetDeviceCount();
-
-  // TODO: 오디오 장치가 하나도 없는 경우
-  if (devices == 0)
-  {
-  }
-
-  Napi::Array deviceList = Napi::Array::New(env, devices);
-
-  for (int i = 0; i < devices; i++)
-  {
-    const PaDeviceInfo *device = Pa_GetDeviceInfo(i);
-    Napi::Object deviceInfo = Napi::Object::New(env);
-    deviceInfo.Set("name", Napi::String::New(env, device->name));
-    deviceList[i] = (deviceInfo);
-  }
-
-  Pa_Terminate();
-  return deviceList;
 }
 
 Napi::Value Nordaudio::GetVersion(const Napi::CallbackInfo &info)

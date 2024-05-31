@@ -3,17 +3,18 @@
  */
 
 #include <napi.h>
+
 #include "nordaudio.h"
 #include "portaudio.h"
 
-Nordaudio::Nordaudio(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Nordaudio>(info)
-{
-  // Napi::Env env = info.Env();
-}
-
 Napi::Object Nordaudio::Initialize(Napi::Env env, Napi::Object exports)
 {
-  Napi::Function func = DefineClass(env, "Nordaudio", {InstanceMethod("GetDevices", &Nordaudio::GetDevices), InstanceMethod("GetVersion", &Nordaudio::GetVersion)});
+  Napi::Function func = DefineClass(env,
+                                    "Nordaudio",
+                                    {
+                                        InstanceMethod("GetVersion", &Nordaudio::GetVersion),
+                                        // InstanceMethod("GetDevices", &Nordaudio::GetDevices),
+                                    });
 
   Napi::FunctionReference *constructor = new Napi::FunctionReference();
   // Create a persistent reference to the class constructor. This will allow
@@ -32,6 +33,34 @@ Napi::Object Nordaudio::Initialize(Napi::Env env, Napi::Object exports)
   env.SetInstanceData(constructor);
   exports.Set("Nordaudio", func);
   return exports;
+}
+
+Nordaudio::Nordaudio(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Nordaudio>(info)
+{
+  Napi::Env env = info.Env();
+
+  PaError error = Pa_Initialize();
+  if (error != paNoError)
+  {
+    Napi::Error::New(env, "[Nordaudio] Failed to initialize PortAudio\n").ThrowAsJavaScriptException();
+  }
+  else
+  {
+    printf("[Nordaudio] Success to initialize PortAudio\n");
+  }
+}
+
+Nordaudio::~Nordaudio()
+{
+  PaError error = Pa_Terminate();
+  if (error != paNoError)
+  {
+    printf("[Nordaudio] Failed to terminate PortAudio\n");
+  }
+  else
+  {
+    printf("[Nordaudio] Success to terminate PortAudio\n");
+  }
 }
 
 Napi::Value Nordaudio::GetVersion(const Napi::CallbackInfo &info)

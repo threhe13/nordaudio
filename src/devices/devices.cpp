@@ -3,27 +3,20 @@
  */
 
 #include <napi.h>
-#include "portaudio.h"
-#include "devices.h"
 
-Napi::Value GetDevices(const Napi::CallbackInfo &info)
+#include "devices.h"
+#include "portaudio.h"
+
+Napi::Value Devices::GetDevices(const Napi::CallbackInfo &info)
 {
   Napi::Env env = info.Env();
-
-  PaError error = Pa_Initialize();
-
-  if (error != paNoError)
-  {
-    // Napi::String errorText = Napi::String::New(env, Pa_GetErrorText(error).c_str());
-    Napi::Error::New(env, "[ERROR] Failed to initialize PortAudio").ThrowAsJavaScriptException();
-  }
 
   int devices = Pa_GetDeviceCount();
   Napi::Array deviceList = Napi::Array::New(env, devices);
 
   if (devices == 0)
   {
-    Pa_Terminate();
+    printf("[Nordaudio] No device");
     return deviceList;
   }
 
@@ -31,10 +24,13 @@ Napi::Value GetDevices(const Napi::CallbackInfo &info)
   {
     const PaDeviceInfo *device = Pa_GetDeviceInfo(i);
     Napi::Object deviceInfo = Napi::Object::New(env);
+
     deviceInfo.Set("name", Napi::String::New(env, device->name));
-    deviceList[i] = (deviceInfo);
+    deviceInfo.Set("sampleRate", Napi::Number::New(env, device->defaultSampleRate));
+    deviceInfo.Set("inputChannel", Napi::Number::New(env, device->maxInputChannels));
+    deviceInfo.Set("outputChannel", Napi::Number::New(env, device->maxOutputChannels));
+    deviceList[i] = deviceInfo;
   }
 
-  Pa_Terminate();
   return deviceList;
 }

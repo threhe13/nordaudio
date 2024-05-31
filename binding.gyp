@@ -4,12 +4,14 @@
       "target_name": "nordaudio",
       "sources": [ 
         "src/main.cpp", 
-        "src/nordaudio/nordaudio.cpp" 
+        "src/nordaudio/nordaudio.cpp",
+        # "src/devices/devices.cpp",
       ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "portaudio/include/",
-        "src/nordaudio/"
+        "src/nordaudio/",
+        # "src/devices/",
       ],
       "dependencies": [
         # "<!@(node -p \"require('node-addon-api').gyp\")",
@@ -17,11 +19,11 @@
       "defines": [ 'NAPI_DISABLE_CPP_EXCEPTIONS' ],
       "conditions": [
         ["OS=='win' and target_arch=='x64'", {
-          "link_settings": {
-            "libraries": [
-              "-Wl,-rpath,build/Release/"
-            ]
-          },
+          # "link_settings": {
+          #   "libraries": [
+          #     "-Wl,-rpath,build/Release/"
+          #   ]
+          # },
           "libraries" : [
             "<(module_root_dir)/portaudio/bin/Windows/x64/portaudio_x64.lib"
           ],

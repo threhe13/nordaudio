@@ -7,6 +7,12 @@
 
 #include <napi.h>
 
-Napi::Value GetDevices(const Napi::CallbackInfo &info);
+class Devices
+{
+public:
+  Napi::Value GetDevices(const Napi::CallbackInfo &info);
+
+private:
+}
 
 #endif

@@ -10,8 +10,9 @@
 class Nordaudio : public Napi::ObjectWrap<Nordaudio>
 {
 public:
-  Nordaudio(const Napi::CallbackInfo &info);
   static Napi::Object Initialize(Napi::Env env, Napi::Object exports);
+  Nordaudio(const Napi::CallbackInfo &info);
+  ~Nordaudio();
 
 private:
   Napi::Value GetVersion(const Napi::CallbackInfo &info);

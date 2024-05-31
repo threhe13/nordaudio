@@ -16,7 +16,8 @@
 
 Napi::Object NordAudio(Napi::Env env, Napi::Object exports)
 {
-  return Nordaudio::Initialize(env, exports);
+  Nordaudio::Initialize(env, exports);
+  return exports;
 }
 
 /**

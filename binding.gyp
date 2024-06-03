@@ -5,13 +5,11 @@
       "sources": [ 
         "src/main.cpp", 
         "src/nordaudio/nordaudio.cpp",
-        # "src/devices/devices.cpp",
       ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "portaudio/include/",
         "src/nordaudio/",
-        # "src/devices/",
       ],
       "dependencies": [
         # "<!@(node -p \"require('node-addon-api').gyp\")",

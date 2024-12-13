@@ -1,9 +1,9 @@
 /*
- * Copyright 2024 Hohae
+ * Copyright 2024 sunghyun
  */
 
 #include <napi.h>
-#include "nordaudio.h"
+#include "instance.h"
 
 /**
  * This code is our entry-point. We receive two arguments here, the first is the
@@ -16,7 +16,7 @@
 
 Napi::Object NordAudio(Napi::Env env, Napi::Object exports)
 {
-  Nordaudio::Initialize(env, exports);
+  nordaudio::NordaudioInstance::Initialize(env, exports);
   return exports;
 }
 

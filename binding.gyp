@@ -3,13 +3,13 @@
     {
       "target_name": "nordaudio",
       "sources": [ 
-        "src/main.cpp", 
-        "src/nordaudio/nordaudio.cpp",
+        "src/nordaudio.cpp", 
+        "src/instance.cpp",
+        "src/device.cpp"
       ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "portaudio/include/",
-        "src/nordaudio/",
       ],
       "dependencies": [
         # "<!@(node -p \"require('node-addon-api').gyp\")",
